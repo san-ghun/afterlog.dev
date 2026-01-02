@@ -1,8 +1,8 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import '../styles/theme.css';
-import '../styles/typography.css';
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/theme.css";
+import "../styles/typography.css";
 
 interface Props {
 	title: string;
@@ -10,8 +10,12 @@ interface Props {
 	image?: string;
 }
 
-const { title, description = 'afterlog - a log of systems in progress', image = '/og.png' } = Astro.props;
-const siteTitle = 'afterlog.dev';
+const {
+	title,
+	description = "afterlog - a log of systems in progress",
+	image = "/og.png",
+} = Astro.props;
+const siteTitle = "afterlog.dev";
 const fullTitle = `${title} | ${siteTitle}`;
 ---
 
@@ -42,8 +46,13 @@ const fullTitle = `${title} | ${siteTitle}`;
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-    <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title={siteTitle} href={new URL('rss.xml', Astro.site ?? Astro.url)} />
+		<!-- RSS Feed -->
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title={siteTitle}
+			href={new URL("rss.xml", Astro.site ?? Astro.url)}
+		/>
 	</head>
 	<body>
 		<Header />

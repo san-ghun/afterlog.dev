@@ -1,18 +1,50 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-// 나중에 최신글 및 고정글 로드 로직 추가 예정
+// Pinned Essays (slates)
+const pinnedSlugs = [
+  { section: "thinking", slug: "hello-world" },
+  { section: "thinking", slug: "why-i-log-after-building" },
+  { section: "systems", slug: "i-dont-build-tools-i-build-rhythms" },
+  { section: "systems", slug: "a-personal-system-is-a-living-thing" },
+];
+
+const pinnedPosts = await Promise.all(
+  pinnedSlugs.map(async (p) => await getEntry(p.section as any, p.slug)),
+);
+
+// Recent Thinking/Logs
+const recentThinking = await getCollection("thinking");
+const recentSystems = await getCollection("systems");
+const recentMaking = await getCollection("making");
+const recentNotes = await getCollection("notes");
+const recentLogs = await getCollection("logs");
+
+const allPosts = [
+  ...recentThinking,
+  ...recentSystems,
+  ...recentMaking,
+  ...recentNotes,
+  ...recentLogs,
+]
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 10);
 ---
 
 <BaseLayout title="Home">
   <section class="hero">
     <h1>afterlog</h1>
     <p class="intro">
-      만들고, 실행하고, 자동화한 <strong>이후에 남는 생각들</strong>을 기록하는 공간입니다.<br />
+      만들고, 실행하고, 자동화한 <strong>이후에 남는 생각들</strong>을 기록하는
+      공간입니다.<br />
       결과보다 과정, 기능보다 리듬을 남깁니다.
     </p>
     <p class="sub-intro">
-      이곳의 글은 완성된 결론이 아니라, 작동 중인 시스템에서 발생한 <strong>사유의 로그</strong>입니다.
+      이곳의 글은 완성된 결론이 아닌, 작동 중인 시스템에서 발생한 <strong
+        >사유의 로그</strong
+      >입니다.
     </p>
   </section>
 
@@ -20,9 +52,40 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <section class="featured-posts">
     <h2>Pinned Essays</h2>
-    <div class="empty-state">
-      <p>조만간 첫 사유가 기록될 예정입니다.</p>
+    <div class="pinned-grid">
+      {
+        pinnedPosts.map(
+          (post) =>
+            post && (
+              <a href={`/${post.collection}/${post.slug}`} class="pinned-card">
+                <div class="card-meta">{post.collection}</div>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+              </a>
+            ),
+        )
+      }
     </div>
+  </section>
+
+  <section class="recent-posts">
+    <h2>Recent Thinking</h2>
+    <ul class="post-list">
+      {
+        allPosts.map((post) => (
+          <li>
+            <time datetime={post.data.date.toISOString()}>
+              {new Date(post.data.date).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
+            </time>
+            <a href={`/${post.collection}/${post.slug}`}>{post.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </BaseLayout>
 
@@ -58,17 +121,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin: 4rem 0;
   }
 
-  .featured-posts {
+  .featured-posts,
+  .recent-posts {
     max-width: var(--max-width);
-    margin: 2rem auto;
+    margin: 4rem auto;
     padding: 0 1.5rem;
   }
 
-  .empty-state {
-    padding: 4rem 0;
-    text-align: center;
+  h2 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--text-muted);
-    border: 1px dashed var(--bg-soft);
+    margin-bottom: 2rem;
+  }
+
+  .pinned-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pinned-card {
+    background: var(--bg-soft);
+    padding: 2rem;
     border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    display: block;
+    text-decoration: none;
+  }
+
+  .pinned-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .card-meta {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .pinned-card h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.4rem;
+    color: var(--text);
+  }
+
+  .pinned-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-list li {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--bg-soft);
+    align-items: baseline;
+  }
+
+  .post-list time {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    min-width: 100px;
+  }
+
+  .post-list a {
+    font-size: 1.2rem;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .post-list a:hover {
+    color: var(--accent);
   }
 </style>

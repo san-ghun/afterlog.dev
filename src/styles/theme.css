@@ -1,10 +1,15 @@
 :root {
-  --bg: #0f1115;          /* 거의 블랙 */
-  --bg-soft: #16181d;     /* 다크 그레이 */
-  --text: #e6e6e6;        /* 아이보리 */
+  --bg: #0f1115;
+  /* 거의 블랙 */
+  --bg-soft: #16181d;
+  /* 다크 그레이 */
+  --text: #e6e6e6;
+  /* 아이보리 */
   --text-muted: #a0a0a0;
-  --accent: #8aadf4;     /* catppuccin blue */
-  --green: #a6da95;      /* terminal green */
+  --accent: #8aadf4;
+  /* catppuccin blue */
+  --green: #a6da95;
+  /* terminal green */
   --max-width: 68ch;
 }
 
