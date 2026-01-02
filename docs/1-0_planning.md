@@ -32,7 +32,7 @@
 * **Framework**: Astro
 * **Content**: Astro Content Collections + Markdown/MDX
 * **Styling**: Vanilla CSS (커스텀 테마)
-* **Deploy**: Cloudflare Pages
+* **Deploy**: Cloudflare Workers
 
 ---
 

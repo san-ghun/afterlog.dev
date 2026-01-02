@@ -153,7 +153,7 @@ Surface  ──>  Mid  ──>  Core
 
 ## 5. 기술 스택 제안 (나에게 맞는 방향)
 
-너의 성향 기준:
+나의 성향 기준:
 
 * 글 + 시스템 사고
 * 장기 운영
@@ -173,7 +173,7 @@ Surface  ──>  Mid  ──>  Core
 * Astro
 * Content Collections
 * Markdown + Frontmatter
-* GitHub → Cloudflare Pages
+* GitHub → Cloudflare Workers
 
 **Option B — 정적 + 실험적**
 

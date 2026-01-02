@@ -38,7 +38,7 @@ prompt:
 
 ### ✅ 배포
 
-* **Cloudflare Pages**
+* **Cloudflare Workers**
 * GitHub 연동
 
 ---
