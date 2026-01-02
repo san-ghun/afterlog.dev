@@ -1,43 +1,77 @@
-# Astro Starter Kit: Minimal
+# afterlog.dev
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A minimal, markdown-driven blog for logging thoughts after building systems.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> **afterlog**는 만들고, 실행하고, 자동화한 **이후에 남는 생각들**을 기록하는 공간입니다.
+> 결과보다 과정, 기능보다 리듬을 남깁니다.
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🚀 프로젝트 구조
 
 ```text
-/
-├── public/
+afterlog/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── content/        # Markdown 콘텐츠 (thinking, systems, making, 등)
+│   ├── layouts/        # Astro 레이아웃 (BaseLayout, PostLayout)
+│   ├── components/     # UI 컴포넌트 (Header, Footer)
+│   └── pages/          # 라우팅 (index, about, now, dynamic routes)
+├── public/
+│   └── assets/posts/   # 포스트별 미디어 에셋 저장소
+└── docs/               # 설계 및 기획 문서
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## ✍️ 글 작성 가이드
 
-Any static assets, like images, can be placed in the `public/` directory.
+### 1. 섹션 선택 및 파일 생성
+`src/content/{section}` 디렉토리 안에 `.md` 파일을 생성합니다.
+*   **thinking**: 철학, 메타 사고, 질문
+*   **systems**: 설계, 구조, 아키텍처
+*   **making**: 프로젝트 구현 기록
+*   **notes**: 짧은 관찰과 아이디어
+*   **logs**: 주간/월간 회고
 
-## 🧞 Commands
+### 2. Frontmatter 작성
+모든 글은 아래 형식을 따릅니다.
 
-All commands are run from the root of the project, from a terminal:
+```yaml
+---
+title: "사유의 제목"
+description: "SEO 및 LLM 요약을 위한 짧은 요약 문장"
+date: 2026-01-02
+section: thinking
+tags: [systems, rhythm]
+draft: false
+---
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### 3. 미디어 관리
+이미지는 `public/assets/posts/{slug}/` 경로에 위치시키고, 마크다운에서는 `/assets/posts/{slug}/image.png`와 같이 참조합니다.
 
-## 👀 Want to learn more?
+---
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 🛠️ 개발 커맨드
+
+| Command | Action |
+| :--- | :--- |
+| `npm install` | 의존성 설치 |
+| `npm run dev` | 로컬 개발 서버 실행 (`localhost:4321`) |
+| `npm run build` | 프로덕션 빌드 (`./dist/`) |
+| `npm run preview` | 빌드 결과물 미리보기 |
+
+---
+
+## 📜 운영 원칙
+
+*   완결된 글보다 진행 중인 사고를 기록한다.
+*   발행 주기보다 사고의 지속성을 우선한다.
+*   수정은 자유롭게, 삭제는 최소화한다.
+*   서두에 1~2문장 요약을 포함한다 (GEO 최적화).
+
+---
+
+## 🌐 배포
+*   **Cloudflare Pages**를 통해 자동 배포됩니다.
+*   `main` 브랜치에 push 시 빌드 및 배포가 트리거됩니다.
