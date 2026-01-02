@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Now">
+  <article>
+    <h1>Now</h1>
+    <p class="subtitle">현재 제가 집중하고 있는 것들입니다.</p>
+    
+    <div class="now-section">
+      <h2>Working</h2>
+      <ul>
+        <li>afterlog.dev 블로그 시스템 구축 중</li>
+        <li>Astro와 Content Collections를 활용한 확장성 있는 아키텍처 설계</li>
+      </ul>
+    </div>
+
+    <div class="now-section">
+      <h2>Thinking</h2>
+      <ul>
+        <li>"자동화보다 중요한 것은 리듬이다"</li>
+        <li>개인 사유 시스템의 지속 가능성</li>
+      </ul>
+    </div>
+
+    <p class="updated">마지막 업데이트: 2026년 1월 2일</p>
+  </article>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-top: -1rem;
+    margin-bottom: 3rem;
+  }
+
+  .now-section {
+    margin-bottom: 3rem;
+  }
+
+  .updated {
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

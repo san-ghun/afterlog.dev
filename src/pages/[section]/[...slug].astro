@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const sections = ['thinking', 'systems', 'making', 'notes', 'logs'];
+  
+  const postPaths = await Promise.all(
+    sections.map(async (section) => {
+      const posts = await getCollection(section as any);
+      return posts.map((post) => ({
+        params: { section, slug: post.slug },
+        props: { post, type: 'post' as const },
+      }));
+    })
+  );
+
+  const sectionPaths = sections.map((section) => ({
+    params: { section, slug: undefined },
+    props: { type: 'section' as const, section },
+  }));
+
+  return [...postPaths.flat(), ...sectionPaths];
+}
+
+const { section } = Astro.params;
+const { post, type } = Astro.props;
+
+let postsInCategory: any[] = [];
+if (type === 'section') {
+  postsInCategory = await getCollection(section as any);
+  postsInCategory.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+---
+
+{type === 'post' ? (
+  <PostLayout frontmatter={post.data}>
+    {async () => {
+      const { Content } = await post.render();
+      return <Content />;
+    }}
+  </PostLayout>
+) : (
+  <BaseLayout title={section?.toUpperCase() ?? ''}>
+    <article>
+      <header class="section-header">
+        <h1>{section?.toUpperCase()}</h1>
+        <p class="description">
+          {section === 'thinking' && '철학, 메타 사고, 그리고 깊은 질문들'}
+          {section === 'systems' && '구조, 설계, 그리고 아키텍처'}
+          {section === 'making' && '실제 구현과 프로젝트 로그'}
+          {section === 'notes' && '짧은 관찰과 아이디어의 조각들'}
+          {section === 'logs' && '시간의 흐름에 따른 회고'}
+        </p>
+      </header>
+      <hr />
+      <ul class="post-list">
+        {postsInCategory.map((p) => (
+          <li>
+            <time datetime={p.data.date.toISOString()}>
+              {new Date(p.data.date).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })}
+            </time>
+            <a href={`/${section}/${p.slug}`}>{p.data.title}</a>
+          </li>
+        ))}
+      </ul>
+      {postsInCategory.length === 0 && <p class="empty">아직 등록된 글이 없습니다.</p>}
+    </article>
+  </BaseLayout>
+)}
+
+<style>
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .description {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--bg-soft);
+    margin: 2rem 0;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-list li {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--bg-soft);
+    align-items: baseline;
+  }
+
+  .post-list time {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    min-width: 100px;
+    font-family: var(--code-font);
+  }
+
+  .post-list a {
+    font-size: 1.2rem;
+    transition: color 0.2s;
+  }
+
+  .post-list a:hover {
+    color: var(--accent);
+  }
+
+  .empty {
+    padding: 4rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--bg-soft);
+    border-radius: 8px;
+  }
+</style>
