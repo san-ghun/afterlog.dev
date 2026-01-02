@@ -6,5 +6,11 @@
   ],
   "exclude": [
     "dist"
-  ]
+  ],
+  "compilerOptions": {
+    "types": [
+      "./worker-configuration.d.ts",
+      "node"
+    ]
+  }
 }
